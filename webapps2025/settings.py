@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'register',
     'payapp',
     'conversion',
+    'timestamp_service.apps.TimestampServiceConfig',
 ]
 
 MIDDLEWARE = [

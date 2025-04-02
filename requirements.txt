@@ -1,2 +1,5 @@
 Django~=5.1.7
 thrift
+django-crispy-forms
+crispy-bootstrap5
+requests

@@ -1,0 +1,31 @@
+body {
+    background-color: #f8f9fa;
+}
+
+.auth-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.auth-card {
+    border-radius: 1rem;
+    overflow: hidden;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.auth-card .card-header {
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+}
+
+.auth-brand {
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.auth-brand i {
+    font-size: 3rem;
+    color: #1e88e5;
+}

@@ -1,0 +1,18 @@
+{% extends 'layouts/auth_layout.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Create an Account - PayApp{% endblock %}
+
+{% block auth_content %}
+<div class="card auth-card">
+    <div class="card-header bg-primary text-white text-center">
+        <h4 class="mb-0"><i class="fas fa-user-plus me-2"></i>Create Your Account</h4>
+    </div>
+    <div class="card-body">
+        {% crispy form %}
+    </div>
+    <div class="card-footer text-center py-3">
+        <p class="mb-0">Already have an account? <a href="{% url 'register:login' %}">Log In</a></p>
+    </div>
+</div>
+{% endblock %}

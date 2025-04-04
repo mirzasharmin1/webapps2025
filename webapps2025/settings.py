@@ -137,9 +137,9 @@ CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 # Authentication settings
-LOGIN_URL = 'login'
-LOGIN_REDIRECT_URL = '/'  # Temporary redirection to home
-LOGOUT_REDIRECT_URL = 'login'
+LOGIN_URL = '/auth/login'
+LOGIN_REDIRECT_URL = '/webapps2025/'  # Temporary redirection to home
+LOGOUT_REDIRECT_URL = '/auth/login'
 
 # Security settings - Comment these out during development if needed
 # SESSION_COOKIE_SECURE = True  # For HTTPS

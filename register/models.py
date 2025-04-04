@@ -18,6 +18,18 @@ class Account(models.Model):
     balance = models.DecimalField(max_digits=12, decimal_places=2, default=0)
     created_at = models.CharField(max_length=30, blank=True, null=True)
 
+    @classmethod
+    def get_all_accounts(cls):
+        """Return all accounts with related user info"""
+        return cls.objects.select_related('user').all()
+
+    @property
+    def user_full_name(self):
+        """Returns the user's full name or username if not available"""
+        if self.user.first_name and self.user.last_name:
+            return f"{self.user.first_name} {self.user.last_name}"
+        return self.user.username
+
     def __str__(self):
         return f"{self.user.username}'s Account ({self.currency})"
 

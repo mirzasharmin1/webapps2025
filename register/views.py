@@ -2,8 +2,8 @@ import decimal
 
 import requests
 from django.contrib import messages
-from django.contrib.auth import login, authenticate
-from django.contrib.auth.views import LoginView
+from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth.views import LoginView, LogoutView as BaseLogoutView
 from django.db import transaction
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
@@ -28,7 +28,7 @@ def get_conversion_rate(from_currency, to_currency, amount=1):
 class RegisterView(CreateView):
     form_class = UserRegistrationForm
     template_name = 'register/register.html'
-    success_url = reverse_lazy('register:login')
+    success_url = reverse_lazy('auth:login')
 
     def form_valid(self, form):
 
@@ -53,7 +53,7 @@ class RegisterView(CreateView):
                     initial_balance = initial_gbp * conversion_rate
                 else:
                     messages.error(self.request, "Currency conversion failed. Please try again with a valid currency.")
-                    return redirect('payapp:signup')
+                    return redirect('auth:register')
 
             user.account.balance = initial_balance
             user.account.save()
@@ -66,9 +66,19 @@ class RegisterView(CreateView):
 
             messages.success(self.request,
                              f'Account created successfully! Your initial balance is {initial_balance} {currency}.')
-            return redirect('payapp:dashboard')
+            return redirect('payapp:home')
 
 
 class CustomLoginView(LoginView):
     template_name = 'register/login.html'
     form_class = CustomLoginForm
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return redirect('/webapps2025/')
+        return super().dispatch(request, *args, **kwargs)
+
+
+def custom_logout_view(request):
+    logout(request)
+    return redirect('/auth/login/')

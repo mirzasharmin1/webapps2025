@@ -10,6 +10,7 @@
                 <h4 class="mb-0"><i class="fas fa-tachometer-alt me-2"></i>Admin Dashboard</h4>
             </div>
             <div class="card-body">
+                <h5 class="mb-3">User Statistics</h5>
                 <div class="row">
                     <div class="col-md-4 mb-3">
                         <div class="card bg-light">
@@ -20,7 +21,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="col-md-4 mb-3">
                         <div class="card bg-light">
                             <div class="card-body text-center">
@@ -30,7 +31,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="col-md-4 mb-3">
                         <div class="card bg-light">
                             <div class="card-body text-center">
@@ -41,7 +42,40 @@
                         </div>
                     </div>
                 </div>
-                
+
+                <h5 class="mb-3 mt-4">Transaction Statistics</h5>
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <div class="card bg-light">
+                            <div class="card-body text-center">
+                                <i class="fas fa-exchange-alt text-primary mb-3" style="font-size: 2rem;"></i>
+                                <h5 class="card-title">Total Transactions</h5>
+                                <p class="card-text fs-4 fw-bold">{{ total_transactions }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <div class="card bg-light">
+                            <div class="card-body text-center">
+                                <i class="fas fa-paper-plane text-primary mb-3" style="font-size: 2rem;"></i>
+                                <h5 class="card-title">Payments</h5>
+                                <p class="card-text fs-4 fw-bold">{{ payment_transactions }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <div class="card bg-light">
+                            <div class="card-body text-center">
+                                <i class="fas fa-hand-holding-usd text-primary mb-3" style="font-size: 2rem;"></i>
+                                <h5 class="card-title">Payment Requests</h5>
+                                <p class="card-text fs-4 fw-bold">{{ request_transactions }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="row mt-4">
                     <div class="col-md-6">
                         <a href="{% url 'payapp:admin_user_accounts' %}" class="btn btn-primary w-100 mb-3">
@@ -49,8 +83,8 @@
                         </a>
                     </div>
                     <div class="col-md-6">
-                        <a href="{% url 'payapp:admin_create_admin' %}" class="btn btn-success w-100 mb-3">
-                            <i class="fas fa-user-plus me-2"></i> Create New Administrator
+                        <a href="{% url 'payapp:admin_transactions' %}" class="btn btn-primary w-100 mb-3">
+                            <i class="fas fa-exchange-alt me-2"></i> View All Transactions
                         </a>
                     </div>
                 </div>

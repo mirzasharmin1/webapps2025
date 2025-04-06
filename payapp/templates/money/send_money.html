@@ -1,20 +1,30 @@
 {% extends 'layouts/base.html' %}
+{% load crispy_forms_tags %}
 
 {% block title %}Send Money - PayApp{% endblock %}
 
 {% block content %}
-<div class="card shadow">
-    <div class="card-header bg-primary text-white">
-        <h4 class="mb-0"><i class="fas fa-paper-plane me-2"></i>Send Money</h4>
-    </div>
-    <div class="card-body text-center py-5">
-        <div class="mb-4">
-            <i class="fas fa-tools text-muted" style="font-size: 4rem;"></i>
-        </div>
-        <h4>Send Money Feature Coming Soon</h4>
-        <p class="text-muted">This feature is currently under development.</p>
-        <div class="mt-4">
-            <a href="{% url 'payapp:home' %}" class="btn btn-primary">Back to Dashboard</a>
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0"><i class="fas fa-paper-plane me-2"></i>Send Money</h4>
+            </div>
+            <div class="card-body p-4">
+                <div class="alert alert-info">
+                    <div class="d-flex">
+                        <div class="me-3">
+                            <i class="fas fa-info-circle fa-2x"></i>
+                        </div>
+                        <div>
+                            <h5 class="alert-heading">Your account information</h5>
+                            <p class="mb-0">Current balance: <strong>{{ user.account.balance|floatformat:2 }} {{ user.account.currency }}</strong></p>
+                        </div>
+                    </div>
+                </div>
+
+                {% crispy form %}
+            </div>
         </div>
     </div>
 </div>

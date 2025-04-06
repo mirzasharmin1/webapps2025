@@ -2,20 +2,95 @@
 
 {% block title %}Transaction History - PayApp{% endblock %}
 
+{% block extra_css %}
+<style>
+    .transaction-item {
+        border-left: 4px solid transparent;
+        transition: all 0.2s;
+    }
+    .transaction-item:hover {
+        background-color: rgba(0,123,255,0.05);
+    }
+    .transaction-payment {
+        border-left-color: #28a745;
+    }
+    .transaction-request {
+        border-left-color: #ffc107;
+    }
+    .transaction-item.status-pending {
+        background-color: rgba(255, 193, 7, 0.1);
+    }
+    .transaction-item.status-completed {
+        background-color: rgba(40, 167, 69, 0.05);
+    }
+    .transaction-item.status-rejected {
+        background-color: rgba(220, 53, 69, 0.05);
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="card shadow">
     <div class="card-header bg-primary text-white">
         <h4 class="mb-0"><i class="fas fa-history me-2"></i>Transaction History</h4>
     </div>
-    <div class="card-body text-center py-5">
-        <div class="mb-4">
-            <i class="fas fa-tools text-muted" style="font-size: 4rem;"></i>
-        </div>
-        <h4>Transaction History Feature Coming Soon</h4>
-        <p class="text-muted">This feature is currently under development.</p>
-        <div class="mt-4">
-            <a href="{% url 'payapp:home' %}" class="btn btn-primary">Back to Dashboard</a>
-        </div>
+    <div class="card-body">
+        {% if transactions %}
+            <div class="list-group">
+                {% for transaction in transactions %}
+                    <a href="{% url 'payapp:transaction_detail' transaction.id %}" class="list-group-item list-group-item-action transaction-item {% if transaction.transaction_type == 'PAYMENT' %}transaction-payment{% else %}transaction-request{% endif %} status-{{ transaction.status|lower }}">
+                        <div class="d-flex w-100 justify-content-between align-items-center">
+                            <div>
+                                {% if transaction.transaction_type == 'PAYMENT' %}
+                                    {% if transaction.sender == user %}
+                                        <h5 class="mb-1"><i class="fas fa-arrow-right text-danger me-2"></i> Sent payment to {{ transaction.recipient.username }}</h5>
+                                    {% else %}
+                                        <h5 class="mb-1"><i class="fas fa-arrow-left text-success me-2"></i> Received payment from {{ transaction.sender.username }}</h5>
+                                    {% endif %}
+                                {% else %}
+                                    {% if transaction.sender == user %}
+                                        <h5 class="mb-1"><i class="fas fa-question-circle text-warning me-2"></i> Requested payment from {{ transaction.recipient.username }}</h5>
+                                    {% else %}
+                                        <h5 class="mb-1"><i class="fas fa-exclamation-circle text-warning me-2"></i> Payment request from {{ transaction.sender.username }}</h5>
+                                    {% endif %}
+                                {% endif %}
+
+                                <small class="text-muted">
+                                    {% if transaction.description %}{{ transaction.description }}{% else %}No description{% endif %}
+                                </small>
+                            </div>
+                            <div class="text-end">
+                                <h5 class="mb-1">
+                                    {% if transaction.transaction_type == 'PAYMENT' %}
+                                        {% if transaction.sender == user %}
+                                            <span class="text-danger">-{{ transaction.amount }} {{ transaction.sender_currency }}</span>
+                                        {% else %}
+                                            <span class="text-success">+{{ transaction.amount }} {{ transaction.sender_currency }}</span>
+                                        {% endif %}
+                                    {% else %}
+                                        <span>{{ transaction.amount }} {{ transaction.sender_currency }}</span>
+                                    {% endif %}
+                                </h5>
+                                <small class="text-muted d-block">{{ transaction.timestamp }}</small>
+                                <span class="badge {% if transaction.status == 'COMPLETED' %}bg-success{% elif transaction.status == 'PENDING' %}bg-warning{% elif transaction.status == 'REJECTED' %}bg-danger{% else %}bg-secondary{% endif %}">
+                                    {{ transaction.get_status_display }}
+                                </span>
+                            </div>
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="text-center py-5">
+                <i class="fas fa-receipt text-muted mb-3" style="font-size: 4rem;"></i>
+                <h5>No transactions yet</h5>
+                <p class="text-muted">Your transaction history will appear here once you've sent or received money.</p>
+                <div class="mt-4">
+                    <a href="{% url 'payapp:send_money' %}" class="btn btn-primary me-2">Send Money</a>
+                    <a href="{% url 'payapp:request_money' %}" class="btn btn-outline-primary">Request Money</a>
+                </div>
+            </div>
+        {% endif %}
     </div>
 </div>
 {% endblock %}

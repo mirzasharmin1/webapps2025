@@ -1,0 +1,63 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}All Transactions - Admin - PayApp{% endblock %}
+
+{% block extra_css %}
+<style>
+    .table-hover tbody tr:hover {
+        background-color: rgba(0,123,255,0.05);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="card shadow">
+    <div class="card-header bg-primary text-white">
+        <h4 class="mb-0"><i class="fas fa-exchange-alt me-2"></i>All Transactions</h4>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>ID</th>
+                        <th>Type</th>
+                        <th>From</th>
+                        <th>To</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for transaction in transactions %}
+                    <tr>
+                        <td>{{ transaction.id }}</td>
+                        <td>
+                            {% if transaction.transaction_type == 'PAYMENT' %}
+                                <span class="badge bg-primary">{{ transaction.get_transaction_type_display }}</span>
+                            {% else %}
+                                <span class="badge bg-warning">{{ transaction.get_transaction_type_display }}</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ transaction.sender.username }}</td>
+                        <td>{{ transaction.recipient.username }}</td>
+                        <td>{{ transaction.amount }} {{ transaction.sender_currency }}</td>
+                        <td>
+                            <span class="badge {% if transaction.status == 'COMPLETED' %}bg-success{% elif transaction.status == 'PENDING' %}bg-warning{% elif transaction.status == 'REJECTED' %}bg-danger{% else %}bg-secondary{% endif %}">
+                                {{ transaction.get_status_display }}
+                            </span>
+                        </td>
+                        <td>{{ transaction.timestamp }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7" class="text-center py-3">No transactions found</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

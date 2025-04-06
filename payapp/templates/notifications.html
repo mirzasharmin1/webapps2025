@@ -7,15 +7,45 @@
     <div class="card-header bg-primary text-white">
         <h4 class="mb-0"><i class="fas fa-bell me-2"></i>Notifications</h4>
     </div>
-    <div class="card-body text-center py-5">
-        <div class="mb-4">
-            <i class="fas fa-tools text-muted" style="font-size: 4rem;"></i>
-        </div>
-        <h4>Notifications Feature Coming Soon</h4>
-        <p class="text-muted">This feature is currently under development.</p>
-        <div class="mt-4">
-            <a href="{% url 'payapp:home' %}" class="btn btn-primary">Back to Dashboard</a>
-        </div>
+    <div class="card-body">
+        {% if notifications %}
+            <div class="list-group">
+                {% for notification in notifications %}
+                    <a href="{% url 'payapp:transaction_detail' notification.transaction.id %}" class="list-group-item list-group-item-action">
+                        <div class="d-flex w-100 justify-content-between">
+                            <div>
+                                {% if notification.notification_type == 'PAYMENT_SENT' %}
+                                    <h5 class="mb-1"><i class="fas fa-paper-plane text-primary me-2"></i> Payment Sent</h5>
+                                    <p class="mb-1">You sent {{ notification.transaction.amount }} {{ notification.transaction.sender_currency }} to {{ notification.transaction.recipient.username }}.</p>
+                                {% elif notification.notification_type == 'PAYMENT_RECEIVED' %}
+                                    <h5 class="mb-1"><i class="fas fa-download text-success me-2"></i> Payment Received</h5>
+                                    <p class="mb-1">You received {{ notification.transaction.amount }} {{ notification.transaction.recipient_currency }} from {{ notification.transaction.sender.username }}.</p>
+                                {% elif notification.notification_type == 'REQUEST_SENT' %}
+                                    <h5 class="mb-1"><i class="fas fa-share text-warning me-2"></i> Payment Request Sent</h5>
+                                    <p class="mb-1">You requested {{ notification.transaction.amount }} {{ notification.transaction.sender_currency }} from {{ notification.transaction.recipient.username }}.</p>
+                                {% elif notification.notification_type == 'REQUEST_RECEIVED' %}
+                                    <h5 class="mb-1"><i class="fas fa-exclamation-circle text-warning me-2"></i> Payment Request Received</h5>
+                                    <p class="mb-1">{{ notification.transaction.sender.username }} requested {{ notification.transaction.amount }} {{ notification.transaction.sender_currency }} from you.</p>
+                                {% elif notification.notification_type == 'REQUEST_ACCEPTED' %}
+                                    <h5 class="mb-1"><i class="fas fa-check-circle text-success me-2"></i> Payment Request Accepted</h5>
+                                    <p class="mb-1">{{ notification.transaction.recipient.username }} accepted your payment request for {{ notification.transaction.amount }} {{ notification.transaction.sender_currency }}.</p>
+                                {% elif notification.notification_type == 'REQUEST_REJECTED' %}
+                                    <h5 class="mb-1"><i class="fas fa-times-circle text-danger me-2"></i> Payment Request Rejected</h5>
+                                    <p class="mb-1">{{ notification.transaction.recipient.username }} rejected your payment request for {{ notification.transaction.amount }} {{ notification.transaction.sender_currency }}.</p>
+                                {% endif %}
+                            </div>
+                            <small class="text-muted">{{ notification.timestamp }}</small>
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="text-center py-5">
+                <i class="fas fa-bell-slash text-muted mb-3" style="font-size: 4rem;"></i>
+                <h5>No notifications</h5>
+                <p class="text-muted">You don't have any notifications yet.</p>
+            </div>
+        {% endif %}
     </div>
 </div>
 {% endblock %}

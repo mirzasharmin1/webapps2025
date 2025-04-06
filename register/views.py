@@ -9,16 +9,17 @@ from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
 
+from webapps2025.settings import BASE_URL
 from .forms import UserRegistrationForm, CustomLoginForm
 
 
 def get_conversion_rate(from_currency, to_currency, amount=1):
     """Get conversion rate from REST service"""
     try:
-        response = requests.get(f'/conversion/{from_currency}/{to_currency}/{amount}/')
+        response = requests.get(f'{BASE_URL}/conversion/{from_currency}/{to_currency}/{amount}/')
         if response.status_code == 200:
             data = response.json()
-            return decimal.Decimal(data['conversion_rate'])
+            return decimal.Decimal(data['converted_amount'])
         return None
     except Exception as e:
         print(f"Error fetching conversion rate: {e}")
